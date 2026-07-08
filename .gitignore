@@ -1,0 +1,37 @@
+# Python
+venv/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+
+# PyInstaller build output
+build/
+dist/
+*.spec.bak
+
+# Annotations (personal data — commit intentionally if needed)
+annotations/
+
+# Exported masks and GeoJSON (generated artifacts — excluded from root, but samples/ is committed)
+*_sem_map.png
+*_inst_map.png
+*.geojson
+
+# Carve-out: sample images and reference masks/annotations are always included
+!samples/
+!samples/**
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

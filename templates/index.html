@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AnnotateLessAnalyseMore</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<!-- ── Label Setup Modal ─────────────────────────────────────── -->
+<div id="modal-overlay" class="modal-overlay">
+  <div class="modal-box">
+    <h2>Configure Labels</h2>
+    <p class="modal-desc">Define the classes you want to annotate.</p>
+
+    <div class="modal-row">
+      <label>Number of labels</label>
+      <input type="number" id="label-count" min="1" max="20" value="2">
+      <button class="btn-secondary" onclick="buildLabelInputs()">Set</button>
+    </div>
+
+    <div id="label-inputs-container"></div>
+
+    <div class="modal-actions">
+      <button id="btn-use-saved" class="btn-secondary" style="display:none" onclick="useSavedLabels()">Use Previous Labels</button>
+      <button id="btn-confirm" class="btn-primary" onclick="confirmLabels()">Start Annotating →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Title bar ──────────────────────────────────────────────── -->
+<div id="titlebar">
+  <span id="title-brand">AnnotateLessAnalyseMore<span id="title-by"> by WSHMWA</span></span>
+  <button id="btn-theme" onclick="toggleTheme()">Light Mode</button>
+</div>
+
+<!-- ── Main App ───────────────────────────────────────────────── -->
+<div id="app">
+
+  <!-- Left: image list -->
+  <aside id="sidebar-left">
+    <div class="sidebar-header">Images</div>
+    <div id="image-list"></div>
+  </aside>
+
+  <!-- Center: canvas -->
+  <main id="canvas-area">
+    <div id="toolbar">
+      <div class="tool-group">
+        <button id="tool-draw"     class="tool-btn active" title="Draw polygon (D)" onclick="setTool('draw')">&#9998; Draw</button>
+        <button id="tool-freehand" class="tool-btn"      title="Freehand draw / stylus (H)" onclick="setTool('freehand')">&#9999; Freehand</button>
+        <button id="tool-edit"     class="tool-btn"      title="Edit vertices (E)" onclick="setTool('edit')">&#10021; Edit</button>
+        <button id="tool-pan"      class="tool-btn"      title="Pan (P / hold Space)" onclick="setTool('pan')">&#10021; Pan</button>
+      </div>
+      <div class="tool-sep"></div>
+      <div class="tool-group">
+        <label class="label-pick-wrap">
+          Label:
+          <select id="label-select" onchange="onLabelChange()"></select>
+          <span id="label-dot" class="label-dot"></span>
+        </label>
+      </div>
+      <div class="tool-sep"></div>
+      <div class="tool-group">
+        <button class="btn-sm" title="Zoom in (+)" onclick="zoomBy(1.25)">＋</button>
+        <span id="zoom-label">100%</span>
+        <button class="btn-sm" title="Zoom out (-)" onclick="zoomBy(0.8)">－</button>
+        <button class="btn-sm" title="Fit image (F)" onclick="fitView()">Fit</button>
+      </div>
+      <div class="tool-sep"></div>
+      <div class="tool-group vis-controls">
+        <label class="vis-label">
+          <input type="checkbox" id="chk-overlay" checked onchange="onOverlayToggle(this)"> Overlay
+        </label>
+        <input type="range" id="slider-overlay" class="vis-slider" min="0" max="100" value="18"
+               title="Overlay opacity" oninput="onOverlayAlpha(this.value)">
+        <span class="tool-sep" style="height:16px"></span>
+        <label class="vis-label">
+          <input type="checkbox" id="chk-outline" checked onchange="onOutlineToggle(this)"> Outline
+        </label>
+        <input type="range" id="slider-outline" class="vis-slider" min="0" max="100" value="100"
+               title="Outline opacity" oninput="onOutlineAlpha(this.value)">
+        <span class="tool-sep" style="height:16px"></span>
+        <label class="vis-label">
+          <input type="checkbox" id="chk-ann-ids" checked onchange="onAnnIdsToggle(this)"> IDs
+        </label>
+        <input type="range" id="slider-ann-id-size" class="vis-slider" min="8" max="32" value="12"
+               title="ID label font size" oninput="onAnnIdSize(this.value)">
+      </div>
+      <div class="tool-sep"></div>
+      <div class="tool-group">
+        <button class="btn-sm" title="Undo last annotation (Ctrl+Z)" onclick="undo()">↩ Undo</button>
+        <button class="btn-sm danger" title="Delete selected (Del)" onclick="deleteSelected()">✕ Delete</button>
+      </div>
+      <div class="tool-sep"></div>
+      <div class="tool-group">
+        <button class="btn-sm" onclick="openMaskModal()">⬇ Load Mask</button>
+        <button class="btn-sm" onclick="saveAnnotations()">💾 Save</button>
+        <button id="btn-discard" class="btn-sm danger" title="Discard all unsaved changes" onclick="discardChanges()" disabled>✕ Discard</button>
+        <button class="btn-action" onclick="exportPNG()">Export PNG</button>
+        <button class="btn-action" onclick="exportGeoJSON()">Export GeoJSON</button>
+      </div>
+      <div class="tool-sep"></div>
+      <button class="btn-sm" style="margin-left:auto" onclick="reconfigureLabels()">⚙ Labels</button>
+    </div>
+
+    <canvas id="canvas"></canvas>
+
+    <div id="statusbar"><span id="status-text">Select an image to begin.</span><span id="cursor-pos"></span></div>
+  </main>
+
+  <!-- Right: annotations + legend -->
+  <aside id="sidebar-right">
+    <div class="sidebar-header">
+      Labels
+    </div>
+    <div id="legend"></div>
+
+    <div class="sidebar-header" style="margin-top:12px; display:flex; align-items:center; justify-content:space-between">
+      <span>Annotations <span id="ann-count" class="badge">0</span></span>
+      <button class="btn-sm danger" onclick="deleteAll()" title="Delete all annotations" style="padding:2px 6px; font-size:10px">✕ All</button>
+    </div>
+    <div id="ann-list"></div>
+  </aside>
+
+</div>
+
+<!-- ── Mask Import Modal ──────────────────────────────────────── -->
+<div id="mask-modal" class="modal-overlay" style="display:none">
+  <div class="modal-box" style="min-width:520px;max-width:640px">
+    <h2>Load Mask as Annotations</h2>
+
+    <!-- Step 1: select file -->
+    <div id="mask-s1">
+      <p class="modal-desc">Choose a mask file. The tool will auto-detect class vs. instance map and suggest label assignments.</p>
+      <label>Mask file</label>
+      <select id="mask-select" style="width:100%;margin:6px 0 16px"></select>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeMaskModal()">Cancel</button>
+        <button id="btn-analyze" class="btn-primary" onclick="analyzeMask()">Analyze →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: confirm label assignment -->
+    <div id="mask-s2" style="display:none">
+      <p class="modal-desc" id="mask-type-desc"></p>
+      <div id="mask-assignment-area"></div>
+
+      <div style="margin-top:14px;display:flex;align-items:center;gap:8px">
+        <label style="color:#888;font-size:12px">Max polygons</label>
+        <input type="number" id="mask-max" value="10000" min="1" max="50000"
+               style="width:80px;padding:4px 6px;background:#0d0d1a;border:1px solid #333;color:#ddd;border-radius:4px">
+        <span style="color:#555;font-size:11px">(per group for class maps; total for instance maps)</span>
+      </div>
+
+      <div class="modal-actions" style="margin-top:16px">
+        <button class="btn-secondary" onclick="showMaskStep(1)">← Back</button>
+        <button class="btn-secondary" onclick="closeMaskModal()">Cancel</button>
+        <button class="btn-primary" onclick="importMask()">Import</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/static/annotator.js"></script>
+</body>
+</html>

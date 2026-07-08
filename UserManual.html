@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AnnotateLessAnalyseMore — User Manual</title>
+<style>
+/* ── Tokens ───────────────────────────────────────────────────────────── */
+:root {
+  --ink:        #1c2b3a;
+  --ink-2:      #354f66;
+  --ink-3:      #6484a0;
+  --ink-4:      #92aec4;
+  --surface:    #f7f9fc;
+  --surface-2:  #eef2f7;
+  --surface-3:  #dde5ef;
+  --accent:     #2d6ab4;
+  --accent-dim: #e8f0fb;
+  --rose:       #b0375a;
+  --rose-dim:   #faedf1;
+  --code-bg:    #edf1f6;
+  --key-bg:     #dfe6ef;
+  --rule:       #cdd8e5;
+  --shadow:     0 1px 4px rgba(28,43,58,.08);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink:        #d6e4f0;
+    --ink-2:      #9ab9d0;
+    --ink-3:      #6a8fa8;
+    --ink-4:      #445f73;
+    --surface:    #111820;
+    --surface-2:  #182230;
+    --surface-3:  #1f2f40;
+    --accent:     #5b9ad6;
+    --accent-dim: #162437;
+    --rose:       #d4607c;
+    --rose-dim:   #251220;
+    --code-bg:    #182230;
+    --key-bg:     #1f2f40;
+    --rule:       #243547;
+    --shadow:     0 1px 4px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="light"] {
+  --ink:        #1c2b3a;
+  --ink-2:      #354f66;
+  --ink-3:      #6484a0;
+  --ink-4:      #92aec4;
+  --surface:    #f7f9fc;
+  --surface-2:  #eef2f7;
+  --surface-3:  #dde5ef;
+  --accent:     #2d6ab4;
+  --accent-dim: #e8f0fb;
+  --rose:       #b0375a;
+  --rose-dim:   #faedf1;
+  --code-bg:    #edf1f6;
+  --key-bg:     #dfe6ef;
+  --rule:       #cdd8e5;
+  --shadow:     0 1px 4px rgba(28,43,58,.08);
+}
+:root[data-theme="dark"] {
+  --ink:        #d6e4f0;
+  --ink-2:      #9ab9d0;
+  --ink-3:      #6a8fa8;
+  --ink-4:      #445f73;
+  --surface:    #111820;
+  --surface-2:  #182230;
+  --surface-3:  #1f2f40;
+  --accent:     #5b9ad6;
+  --accent-dim: #162437;
+  --rose:       #d4607c;
+  --rose-dim:   #251220;
+  --code-bg:    #182230;
+  --key-bg:     #1f2f40;
+  --rule:       #243547;
+  --shadow:     0 1px 4px rgba(0,0,0,.3);
+}
+
+/* ── Reset & base ─────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--ink);
+  background: var(--surface);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Layout shell ─────────────────────────────────────────────────────── */
+.page-wrap {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 32px 80px;
+}
+
+/* ── Cover ────────────────────────────────────────────────────────────── */
+.cover {
+  padding: 72px 0 56px;
+  border-bottom: 2px solid var(--rule);
+  margin-bottom: 56px;
+}
+.cover-eyebrow {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 18px;
+}
+.cover-title {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--ink);
+  text-wrap: balance;
+  margin-bottom: 6px;
+}
+.cover-title span { color: var(--accent); }
+.cover-subtitle {
+  font-size: 1.05rem;
+  color: var(--ink-2);
+  margin-top: 12px;
+  margin-bottom: 28px;
+  max-width: 560px;
+}
+.cover-meta {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 0.8rem;
+  color: var(--ink-3);
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.cover-meta span { display: flex; align-items: center; gap: 6px; }
+.cover-bar {
+  width: 48px;
+  height: 4px;
+  background: var(--accent);
+  margin: 28px 0 0;
+  border-radius: 2px;
+}
+
+/* ── Table of contents ────────────────────────────────────────────────── */
+.toc-box {
+  background: var(--surface-2);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 28px 32px;
+  margin-bottom: 56px;
+}
+.toc-heading {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 18px;
+}
+.toc-list { list-style: none; }
+.toc-list li { border-top: 1px solid var(--rule); }
+.toc-list li:first-child { border-top: none; }
+.toc-list a {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 7px 0;
+  text-decoration: none;
+  color: var(--ink-2);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 0.9rem;
+  transition: color .15s;
+}
+.toc-list a:hover { color: var(--accent); }
+.toc-list a .toc-num {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-4);
+  font-size: 0.78rem;
+  flex-shrink: 0;
+  margin-left: 16px;
+}
+.toc-sub { padding-left: 16px; }
+.toc-sub a { font-size: 0.83rem; color: var(--ink-3); }
+
+/* ── Sections ─────────────────────────────────────────────────────────── */
+.section {
+  margin-bottom: 56px;
+  scroll-margin-top: 24px;
+}
+.section-num {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+h2 {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+  padding-bottom: 12px;
+  border-bottom: 1.5px solid var(--rule);
+  margin-bottom: 24px;
+  text-wrap: balance;
+}
+h3 {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 28px 0 10px;
+}
+h3::before {
+  content: '';
+  display: inline-block;
+  width: 3px;
+  height: 1em;
+  background: var(--accent);
+  border-radius: 1.5px;
+  vertical-align: middle;
+  margin-right: 9px;
+}
+p { margin-bottom: 14px; color: var(--ink-2); }
+p:last-child { margin-bottom: 0; }
+a { color: var(--accent); }
+ul, ol { margin: 0 0 14px 20px; color: var(--ink-2); }
+li { margin-bottom: 5px; }
+strong { color: var(--ink); font-weight: 600; }
+
+/* ── Divider ──────────────────────────────────────────────────────────── */
+hr { border: none; border-top: 1px solid var(--rule); margin: 32px 0; }
+
+/* ── Inline code & paths ──────────────────────────────────────────────── */
+code {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.82em;
+  background: var(--code-bg);
+  color: var(--rose);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+pre {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.82rem;
+  background: var(--code-bg);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  padding: 18px 22px;
+  overflow-x: auto;
+  margin: 16px 0 20px;
+  color: var(--ink);
+  line-height: 1.6;
+  white-space: pre;
+}
+
+/* ── Keyboard key ─────────────────────────────────────────────────────── */
+kbd {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 0.76em;
+  font-weight: 600;
+  background: var(--key-bg);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  padding: 1px 7px;
+  white-space: nowrap;
+}
+
+/* ── Tables ───────────────────────────────────────────────────────────── */
+.table-wrap { overflow-x: auto; margin: 16px 0 22px; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 0.875rem;
+}
+thead { background: var(--surface-2); }
+th {
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding: 10px 14px;
+  border-bottom: 2px solid var(--rule);
+}
+td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink-2);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--surface-2); }
+td kbd { font-size: 0.78em; }
+
+/* ── Callout boxes ────────────────────────────────────────────────────── */
+.callout {
+  border-left: 3px solid var(--accent);
+  background: var(--accent-dim);
+  border-radius: 0 5px 5px 0;
+  padding: 14px 18px;
+  margin: 18px 0;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 0.9rem;
+  color: var(--ink-2);
+}
+.callout.rose {
+  border-color: var(--rose);
+  background: var(--rose-dim);
+}
+.callout strong { color: var(--ink); }
+.callout p { color: inherit; margin-bottom: 6px; }
+.callout p:last-child { margin-bottom: 0; }
+
+/* ── Step list ────────────────────────────────────────────────────────── */
+.steps { list-style: none; margin: 14px 0 20px; padding: 0; counter-reset: steps; }
+.steps li {
+  counter-increment: steps;
+  display: flex;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink-2);
+  font-size: 0.95rem;
+  align-items: flex-start;
+}
+.steps li:last-child { border-bottom: none; }
+.steps li::before {
+  content: counter(steps);
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  background: var(--accent);
+  color: #fff;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+/* ── File tree ────────────────────────────────────────────────────────── */
+.tree {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.82rem;
+  background: var(--code-bg);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  padding: 18px 22px;
+  margin: 16px 0 20px;
+  color: var(--ink);
+  line-height: 1.8;
+  overflow-x: auto;
+}
+.tree .dir  { color: var(--accent); font-weight: 600; }
+.tree .note { color: var(--ink-3); }
+.tree .new  { color: var(--rose); }
+
+/* ── UI area label ────────────────────────────────────────────────────── */
+.ui-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 14px 0 20px;
+}
+.ui-cell {
+  background: var(--surface-2);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  padding: 14px 16px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 0.87rem;
+}
+.ui-cell strong {
+  display: block;
+  color: var(--accent);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+/* ── Theme toggle ─────────────────────────────────────────────────────── */
+.theme-toggle {
+  position: fixed;
+  top: 18px;
+  right: 22px;
+  background: var(--surface-2);
+  border: 1px solid var(--rule);
+  color: var(--ink-2);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 0.75rem;
+  padding: 5px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: background .15s, color .15s;
+}
+.theme-toggle:hover { background: var(--surface-3); color: var(--ink); }
+
+/* ── Back to top ──────────────────────────────────────────────────────── */
+.back-top {
+  text-align: center;
+  padding: 32px 0 0;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 0.82rem;
+}
+.back-top a { color: var(--ink-3); text-decoration: none; }
+.back-top a:hover { color: var(--accent); }
+
+/* ── Print styles ─────────────────────────────────────────────────────── */
+@media print {
+  .theme-toggle, .back-top { display: none; }
+  body { background: #fff; color: #111; font-size: 11pt; }
+  .page-wrap { max-width: 100%; padding: 0 20mm; }
+  .cover { padding: 20mm 0 14mm; }
+  .cover-title { font-size: 22pt; }
+  a { color: inherit; text-decoration: none; }
+  h2 { page-break-after: avoid; font-size: 14pt; }
+  h3 { page-break-after: avoid; font-size: 11pt; }
+  .section { page-break-inside: avoid; }
+  pre, .tree, .callout { page-break-inside: avoid; }
+  table { page-break-inside: avoid; }
+  code { background: #f0f0f0; color: #c0003c; }
+  kbd { background: #eee; border-color: #bbb; }
+  pre, .tree { background: #f5f5f5; border-color: #ddd; color: #111; }
+  .callout { background: #f0f5ff; border-color: #2d6ab4; }
+  .callout.rose { background: #fff0f4; border-color: #b0375a; }
+  thead { background: #f0f0f0; }
+  .ui-cell { background: #f5f5f5; }
+}
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">Dark mode</button>
+
+<div class="page-wrap">
+
+<!-- ── Cover ──────────────────────────────────────────────────────────── -->
+<div class="cover" id="top">
+  <div class="cover-eyebrow">User Manual — v2</div>
+  <div class="cover-title"><span>Annotate</span>Less<span>Analyse</span>More</div>
+  <p class="cover-subtitle">
+    A browser-based histopathology annotation platform for polygon and freehand
+    region labelling, mask import, and CoNSeP-compatible export.
+  </p>
+  <div class="cover-meta">
+    <span>By WSHMWA</span>
+    <span>Platform: Windows / macOS / Linux</span>
+    <span>Revision 20 &mdash; July 2026</span>
+  </div>
+  <div class="cover-bar"></div>
+</div>
+
+<!-- ── Table of contents ──────────────────────────────────────────────── -->
+<div class="toc-box">
+  <div class="toc-heading">Contents</div>
+  <ul class="toc-list">
+    <li><a href="#s1">Installation &amp; Launch<span class="toc-num">1</span></a></li>
+    <li><a href="#s2">Application Layout<span class="toc-num">2</span></a></li>
+    <li><a href="#s3">Image Files<span class="toc-num">3</span></a></li>
+    <li><a href="#s4">Label Configuration<span class="toc-num">4</span></a></li>
+    <li><a href="#s5">Drawing Tools<span class="toc-num">5</span></a>
+      <ul class="toc-sub toc-list">
+        <li><a href="#s5-1">Polygon Draw<span class="toc-num">5.1</span></a></li>
+        <li><a href="#s5-2">Freehand Draw<span class="toc-num">5.2</span></a></li>
+        <li><a href="#s5-3">Edit Tool<span class="toc-num">5.3</span></a></li>
+        <li><a href="#s5-4">Pan<span class="toc-num">5.4</span></a></li>
+      </ul>
+    </li>
+    <li><a href="#s6">Stylus &amp; Touch<span class="toc-num">6</span></a></li>
+    <li><a href="#s7">Annotation Management<span class="toc-num">7</span></a></li>
+    <li><a href="#s8">View Controls<span class="toc-num">8</span></a></li>
+    <li><a href="#s9">Saving Annotations<span class="toc-num">9</span></a></li>
+    <li><a href="#s10">Loading Masks<span class="toc-num">10</span></a></li>
+    <li><a href="#s11">Exporting<span class="toc-num">11</span></a></li>
+    <li><a href="#s12">Keyboard Shortcuts Reference<span class="toc-num">12</span></a></li>
+  </ul>
+</div>
+
+<!-- ── 1. Installation ────────────────────────────────────────────────── -->
+<div class="section" id="s1">
+  <div class="section-num">Section 1</div>
+  <h2>Installation &amp; Launch</h2>
+
+  <h3>Option A — Standalone Executable (recommended)</h3>
+  <p>The executable version requires no Python installation on the target machine. One build step on any Windows PC with Python 3.9+ is sufficient to produce a self-contained <code>.exe</code>.</p>
+  <ol class="steps">
+    <li>Open a terminal in the <code>AnnotateLessAnalyseMore Installation_v2</code> folder and double-click <code>build.bat</code>.</li>
+    <li>The script creates a virtual environment, installs all dependencies, and runs PyInstaller. This takes 2–5 minutes on first run.</li>
+    <li>When complete, locate <code>dist\AnnotateLessAnalyseMore.exe</code>.</li>
+    <li>Copy <strong>only the <code>.exe</code></strong> to any folder that contains your image files.</li>
+    <li>Double-click <code>AnnotateLessAnalyseMore.exe</code>. A terminal window opens and your browser navigates to <code>http://127.0.0.1:5000</code> automatically after ~3 seconds.</li>
+    <li>Close the terminal window to stop the server.</li>
+  </ol>
+
+  <div class="callout">
+    <strong>After build.bat completes</strong>, the installation folder will look like this:
+    <div class="tree">
+<span class="dir">AnnotateLessAnalyseMore Installation_v2\</span>
+├── app.py
+├── annotate.spec
+├── build.bat / run.bat / run.sh
+├── requirements.txt
+├── README.md &amp; UserManual.html
+├── static\  templates\
+├── <span class="new">venv\</span>            <span class="note">← Python environment (~500 MB)</span>
+├── <span class="new">build\</span>           <span class="note">← intermediate cache (safe to delete)</span>
+└── <span class="new">dist\</span>
+    └── <span class="new">AnnotateLessAnalyseMore.exe</span>   <span class="note">← ~80–120 MB</span></div>
+  </div>
+
+  <h3>Option B — Run from Source</h3>
+  <p>Requires Python 3.9+ on the machine running the app. No separate build step.</p>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>OS</th><th>Command</th></tr></thead>
+    <tbody>
+      <tr><td>Windows</td><td><code>run.bat</code> — double-click or run in terminal</td></tr>
+      <tr><td>macOS / Linux</td><td><code>chmod +x run.sh &amp;&amp; ./run.sh</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Both scripts auto-create a <code>venv/</code> on first run, install <code>requirements.txt</code>, and start the Flask server. Open <code>http://127.0.0.1:5000</code> in your browser.</p>
+
+  <h3>Manual Setup</h3>
+  <pre>python -m venv venv
+venv\Scripts\activate      # Windows
+source venv/bin/activate   # macOS / Linux
+pip install -r requirements.txt
+python app.py</pre>
+</div>
+
+<!-- ── 2. Application Layout ──────────────────────────────────────────── -->
+<div class="section" id="s2">
+  <div class="section-num">Section 2</div>
+  <h2>Application Layout</h2>
+  <p>The interface is divided into three vertical panels. The title bar runs across the top.</p>
+
+  <div class="ui-grid">
+    <div class="ui-cell"><strong>Title Bar</strong>Platform name and theme toggle (Dark / Light Mode).</div>
+    <div class="ui-cell"><strong>Toolbar</strong>Drawing tools, label selector, zoom controls, visibility sliders, save/export buttons.</div>
+    <div class="ui-cell"><strong>Left Sidebar — Images</strong>Scrollable list of all image files found in the same folder as the application. Click to load.</div>
+    <div class="ui-cell"><strong>Centre — Canvas</strong>The annotation canvas. Drag to pan, scroll to zoom, draw and edit annotations here.</div>
+    <div class="ui-cell"><strong>Right Sidebar — Labels &amp; Annotations</strong>Labels panel shows each class with its annotation count. Annotations panel lists every annotation for the current image.</div>
+    <div class="ui-cell"><strong>Status Bar</strong>Shows cursor coordinates, dirty-state indicator (orange dot), and action confirmations.</div>
+  </div>
+</div>
+
+<!-- ── 3. Image Files ─────────────────────────────────────────────────── -->
+<div class="section" id="s3">
+  <div class="section-num">Section 3</div>
+  <h2>Image Files</h2>
+  <p>Place image files in the same folder as <code>AnnotateLessAnalyseMore.exe</code> (standalone mode) or in the project root (source mode). The application auto-discovers all supported formats on startup.</p>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Supported formats</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><code>.jpg</code> / <code>.jpeg</code></td><td>Standard JPEG (most common for TCGA tiles)</td></tr>
+      <tr><td><code>.png</code></td><td>PNG — also used for masks; mask files are excluded from the image list automatically</td></tr>
+      <tr><td><code>.tif</code> / <code>.tiff</code></td><td>TIFF (uncompressed or LZW)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Files whose names contain <code>_inst_map</code>, <code>_sem_map</code>, or begin with <code>mask_</code> are treated as masks and appear only in the <strong>Load Mask</strong> dialog, not in the image list.</p>
+  <p>Click any image name in the left sidebar to load it. Unsaved annotations for the current image are automatically saved before switching.</p>
+</div>
+
+<!-- ── 4. Label Configuration ────────────────────────────────────────── -->
+<div class="section" id="s4">
+  <div class="section-num">Section 4</div>
+  <h2>Label Configuration</h2>
+  <p>The label setup dialog appears on first launch. It pre-fills with the CoNSeP / PanNuke nuclear classification schema. You can customise labels at any time.</p>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Index</th><th>Label</th><th>Colour</th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td>Background</td><td><code>#ffffff</code></td></tr>
+      <tr><td>1</td><td>Neoplastic</td><td><code>#ff0000</code></td></tr>
+      <tr><td>2</td><td>Inflammatory</td><td><code>#0000ff</code></td></tr>
+      <tr><td>3</td><td>Connective</td><td><code>#00ff00</code></td></tr>
+      <tr><td>4</td><td>Dead</td><td><code>#808080</code></td></tr>
+      <tr><td>5</td><td>Epithelial</td><td><code>#ffff00</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Changing Labels</h3>
+  <ol class="steps">
+    <li>Click <strong>⚙ Labels</strong> in the toolbar (top right).</li>
+    <li>Adjust the number of labels, change names and colours, or drag the <code>⠿</code> handle to reorder rows.</li>
+    <li>Click <strong>Use Previous Labels</strong> to restore the last saved set.</li>
+    <li>Click <strong>Start Annotating →</strong> to apply.</li>
+  </ol>
+
+  <div class="callout">
+    <strong>Label persistence:</strong> Your configured label set is saved in browser <code>localStorage</code> and restored automatically on next visit. Class indices 0–5 are fixed to the CoNSeP convention for PNG export compatibility; user-added labels receive indices starting at 6.
+  </div>
+
+  <h3>The Labels Panel (right sidebar)</h3>
+  <p>The Labels panel shows each class with a colour swatch, name, and a live count of annotations currently carrying that label. The count updates immediately after every annotation change.</p>
+</div>
+
+<!-- ── 5. Drawing Tools ────────────────────────────────────────────────── -->
+<div class="section" id="s5">
+  <div class="section-num">Section 5</div>
+  <h2>Drawing Tools</h2>
+  <p>Select the active drawing tool from the toolbar or using keyboard shortcuts. The active label determines the class assigned to every new annotation.</p>
+
+  <div id="s5-1">
+  <h3>5.1 &nbsp;Polygon Draw &nbsp;<kbd>D</kbd></h3>
+  <p>Click on the canvas to place vertices one at a time. A preview line follows the cursor.</p>
+  <ul>
+    <li><strong>Close the polygon</strong> — click near the first vertex (snap circle appears), or double-click anywhere, or right-click.</li>
+    <li><strong>Cancel</strong> — press <kbd>Esc</kbd>. The partial polygon is discarded.</li>
+    <li>A minimum of 3 vertices is required before closing.</li>
+  </ul>
+  </div>
+
+  <div id="s5-2">
+  <h3>5.2 &nbsp;Freehand Draw &nbsp;<kbd>H</kbd></h3>
+  <p>Click and drag to draw a free-form stroke. The path is recorded in real time.</p>
+  <ul>
+    <li><strong>Finish</strong> — release the mouse / lift the stylus. The stroke is automatically simplified using the Ramer–Douglas–Peucker algorithm to reduce vertex count.</li>
+    <li><strong>Cancel mid-stroke</strong> — right-click or press <kbd>Esc</kbd>.</li>
+    <li>If the stroke is too short (fewer than 3 points after simplification), it is discarded and the annotation under the cursor is selected instead.</li>
+  </ul>
+  </div>
+
+  <div id="s5-3">
+  <h3>5.3 &nbsp;Edit Tool &nbsp;<kbd>E</kbd></h3>
+  <p>Click an annotation to select it. Selected annotations are highlighted on the canvas and in the annotation list.</p>
+  <ul>
+    <li><strong>Move a vertex</strong> — drag any vertex handle.</li>
+    <li><strong>Insert a vertex</strong> — click on any polygon edge; a new vertex is inserted at that point.</li>
+    <li><strong>Relabel</strong> — with one or more annotations selected, change the label selector in the toolbar; all selected annotations are relabelled at once.</li>
+    <li><strong>Delete</strong> — press <kbd>Del</kbd> or <kbd>Backspace</kbd>.</li>
+  </ul>
+  </div>
+
+  <div id="s5-4">
+  <h3>5.4 &nbsp;Pan &nbsp;<kbd>P</kbd> or hold <kbd>Space</kbd></h3>
+  <p>Pan mode disables annotation interaction. Drag the canvas to scroll the view. Equivalent to scrolling (vertical pan) or two-finger swipe on a touchpad.</p>
+  </div>
+</div>
+
+<!-- ── 6. Stylus & Touch ──────────────────────────────────────────────── -->
+<div class="section" id="s6">
+  <div class="section-num">Section 6</div>
+  <h2>Stylus &amp; Touch Input</h2>
+  <p>All tools are built on the Pointer Events API and work with mouse, touch, and pen/stylus inputs without configuration.</p>
+
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Input</th><th>Behaviour</th></tr></thead>
+    <tbody>
+      <tr><td>Single finger / touch</td><td>Always pans the canvas, regardless of active tool</td></tr>
+      <tr><td>Two-finger pinch</td><td>Zoom and pan simultaneously</td></tr>
+      <tr><td>Stylus tip (draw mode)</td><td>Draws as normal polygon or freehand</td></tr>
+      <tr><td>Stylus tip (freehand mode)</td><td>Stroke is captured with <code>setPointerCapture</code> — no interruption even if the tip leaves the canvas edge</td></tr>
+      <tr><td>Stylus tip (polygon draw)</td><td>Automatically switches to freehand on a drag stroke; short taps select the annotation under the tip</td></tr>
+      <tr><td><strong>Stylus barrel button</strong> (edit mode)</td><td>Press and drag to draw a freehand stroke; on release the annotation is created, the tool stays in edit mode, and the new annotation is auto-selected</td></tr>
+      <tr><td>Short barrel tap (edit mode)</td><td>Selects the annotation under the stylus tip</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="callout rose">
+    <strong>Barrel button note:</strong> Some OS/driver combinations fire a <code>contextmenu</code> event when the barrel button is pressed. The app suppresses this event during an active barrel-button freehand stroke to prevent accidental cancellation.
+  </div>
+</div>
+
+<!-- ── 7. Annotation Management ──────────────────────────────────────── -->
+<div class="section" id="s7">
+  <div class="section-num">Section 7</div>
+  <h2>Annotation Management</h2>
+
+  <h3>Selection</h3>
+  <ul>
+    <li><strong>Single select</strong> — click an annotation on the canvas (edit tool) or click its row in the annotation list.</li>
+    <li><strong>Multi-select (toggle)</strong> — <kbd>Ctrl</kbd> + click to add or remove an annotation from the selection.</li>
+    <li><strong>Range select</strong> — <kbd>Shift</kbd> + click in the annotation list to select all annotations between the last clicked and the current row.</li>
+    <li><strong>Rubber-band select</strong> — in edit mode, drag on empty canvas to draw a selection rectangle. Any annotation with at least one vertex inside the rectangle is selected. Hold <kbd>Ctrl</kbd> while dragging to add to the existing selection.</li>
+    <li><strong>Keyboard navigation</strong> — <kbd>↑</kbd> / <kbd>↓</kbd> moves through the annotation list (when no text input has focus).</li>
+  </ul>
+
+  <h3>Deleting Annotations</h3>
+  <ul>
+    <li>Select one or more annotations, then press <kbd>Del</kbd> or <kbd>Backspace</kbd>.</li>
+    <li>Click the <strong>✕ Delete</strong> button in the toolbar to delete all currently selected annotations.</li>
+    <li>Click <strong>✕ All</strong> in the annotation panel header to delete all annotations for the current image (requires confirmation). This action is undoable.</li>
+  </ul>
+
+  <h3>Relabelling</h3>
+  <ul>
+    <li>Select one or more annotations, then change the label in the toolbar label selector — all selected annotations are relabelled at once.</li>
+    <li>Alternatively, use the inline dropdown in each annotation's list row to relabel that annotation individually.</li>
+  </ul>
+
+  <h3>Undo / Redo</h3>
+  <ul>
+    <li><kbd>Ctrl</kbd> + <kbd>Z</kbd> undoes the last annotation action (up to 50 steps).</li>
+    <li><kbd>Ctrl</kbd> + <kbd>Y</kbd> redoes. Any new action clears the redo stack.</li>
+  </ul>
+
+  <h3>Discard Changes</h3>
+  <p>The <strong>✕ Discard</strong> button (enabled only when there are unsaved changes) reverts all edits to the last saved state. An orange dot in the status bar indicates unsaved changes.</p>
+</div>
+
+<!-- ── 8. View Controls ───────────────────────────────────────────────── -->
+<div class="section" id="s8">
+  <div class="section-num">Section 8</div>
+  <h2>View Controls</h2>
+
+  <h3>Zoom &amp; Pan</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Action</th><th>Method</th></tr></thead>
+    <tbody>
+      <tr><td>Pan</td><td>Scroll wheel (vertical), two-finger swipe on trackpad, or single finger touch</td></tr>
+      <tr><td>Zoom in / out</td><td><kbd>Ctrl</kbd> + scroll, pinch gesture, or toolbar <strong>＋ / －</strong> buttons</td></tr>
+      <tr><td>Fit image to view</td><td><kbd>F</kbd> or toolbar <strong>Fit</strong> button</td></tr>
+      <tr><td>Zoom percentage</td><td>Displayed between the ＋ and － buttons</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Overlay &amp; Outline Opacity</h3>
+  <p>Two independent visibility controls are in the toolbar:</p>
+  <ul>
+    <li><strong>Overlay</strong> checkbox + slider — controls the filled polygon opacity (0–100%). Default 18%.</li>
+    <li><strong>Outline</strong> checkbox + slider — controls the polygon border opacity (0–100%). Default 100%.</li>
+  </ul>
+  <p>Selected annotations receive 2.5× the base overlay opacity and a thicker stroke (2.5 px vs 1.5 px) for visibility regardless of slider values.</p>
+
+  <h3>Annotation ID Labels</h3>
+  <ul>
+    <li>Each annotation is assigned a sequential number (1…N) drawn at its centroid.</li>
+    <li><strong>IDs</strong> checkbox in the toolbar toggles these labels on and off.</li>
+    <li>The adjacent slider adjusts the font size from 8 to 32 px.</li>
+    <li>The same number appears in the annotation list row for cross-reference.</li>
+  </ul>
+
+  <h3>Dark / Light Mode</h3>
+  <p>Click <strong>Light Mode / Dark Mode</strong> in the title bar to toggle the theme. The canvas checkerboard adapts to the theme. The preference is saved in browser <code>localStorage</code> and restored on next visit.</p>
+</div>
+
+<!-- ── 9. Saving ──────────────────────────────────────────────────────── -->
+<div class="section" id="s9">
+  <div class="section-num">Section 9</div>
+  <h2>Saving Annotations</h2>
+  <p>Annotations are stored as JSON files in an <code>annotations/</code> sub-folder next to the application (created automatically on first save).</p>
+  <ul>
+    <li><strong>Manual save</strong> — click <strong>💾 Save</strong> in the toolbar or press <kbd>Ctrl</kbd> + <kbd>S</kbd>.</li>
+    <li><strong>Auto-save</strong> — annotations for the current image are saved automatically when you switch to a different image.</li>
+    <li>The orange dot in the status bar indicates unsaved changes.</li>
+  </ul>
+  <div class="callout">
+    <strong>File location:</strong> <code>annotations\&lt;image_filename&gt;.json</code> (e.g. <code>annotations\slide01.jpg.json</code>). These files are plain JSON and can be inspected or version-controlled.
+  </div>
+</div>
+
+<!-- ── 10. Loading Masks ──────────────────────────────────────────────── -->
+<div class="section" id="s10">
+  <div class="section-num">Section 10</div>
+  <h2>Loading Masks</h2>
+  <p>Click <strong>⬇ Load Mask</strong> in the toolbar to import an existing PNG mask as editable annotations. The dialog runs in two steps.</p>
+
+  <h3>Step 1 — Select a Mask File</h3>
+  <p>The dropdown lists all mask files found alongside the images. The app auto-suggests the mask that matches the current image name (e.g. <code>slide01_inst_map.png</code> for <code>slide01.jpg</code>).</p>
+
+  <h3>Step 2 — Confirm Label Assignment</h3>
+  <p>The app analyses the mask and shows a summary. Three mask types are handled:</p>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Mask type</th><th>Detection</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Semantic map</strong> (<code>_sem_map.png</code>)</td>
+        <td>Filename suffix or pixel values 1–5 matching class indices</td>
+        <td>Each pixel value is mapped to the corresponding CoNSeP label. Include / Skip checkboxes per class.</td>
+      </tr>
+      <tr>
+        <td><strong>Instance + semantic pair</strong> (<code>_inst_map.png</code> + <code>_sem_map.png</code>)</td>
+        <td>Instance map filename with paired semantic map present</td>
+        <td>Each instance is labelled by the most frequent class in the semantic mask at that instance's pixels. Per-class instance counts are shown for confirmation.</td>
+      </tr>
+      <tr>
+        <td><strong>Instance only</strong> (<code>_inst_map.png</code>)</td>
+        <td>Instance map filename, no paired semantic map</td>
+        <td>All instances receive the same fallback label (user selects).</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>The <strong>Max polygons</strong> field (default 10 000, maximum 50 000) limits how many annotations are imported. Adjust downward for faster loading on large masks.</p>
+  <p>Click <strong>Import</strong> to convert the mask to individual polygon annotations. The new annotations are added to any existing annotations for that image.</p>
+
+  <div class="callout rose">
+    <strong>Type detection priority:</strong> Filename suffixes (<code>_inst_map</code> / <code>_sem_map</code>) always take precedence over pixel-value heuristics. This prevents instance maps with ≤ 5 annotations being misidentified as semantic class maps.
+  </div>
+</div>
+
+<!-- ── 11. Exporting ──────────────────────────────────────────────────── -->
+<div class="section" id="s11">
+  <div class="section-num">Section 11</div>
+  <h2>Exporting</h2>
+  <p>Export buttons appear in the toolbar. Annotations must be saved before exporting.</p>
+
+  <h3>Export PNG Masks</h3>
+  <p>Click <strong>Export PNG</strong>. Two mask files are written to the same folder as the source image:</p>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>File</th><th>Bit depth</th><th>Pixel value</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>&lt;stem&gt;_sem_map.png</code></td>
+        <td>uint8</td>
+        <td>Class index 0–5 (CoNSeP convention). Background = 0.</td>
+      </tr>
+      <tr>
+        <td><code>&lt;stem&gt;_inst_map.png</code></td>
+        <td>uint16</td>
+        <td>Sequential instance ID 1…N (annotation order). Background = 0.</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <p><code>&lt;stem&gt;</code> is the image filename <em>without</em> its extension (e.g. <code>slide01.jpg</code> → <code>slide01_sem_map.png</code>).</p>
+  <p>These files are directly compatible with CoNSeP ground-truth format and can be reloaded via the Load Mask dialog.</p>
+
+  <h3>Export GeoJSON</h3>
+  <p>Click <strong>Export GeoJSON</strong>. A <code>&lt;stem&gt;.geojson</code> file is written to the image folder. The file is a standard GeoJSON <code>FeatureCollection</code> compatible with <strong>QuPath 0.4+</strong>:</p>
+  <ul>
+    <li>Each annotation is a <code>Polygon</code> feature with <code>objectType: "annotation"</code>.</li>
+    <li><code>classification.name</code> — the label name.</li>
+    <li><code>classification.color</code> — an <code>[R, G, B]</code> array (QuPath 0.4+ format).</li>
+  </ul>
+  <p>To import into QuPath: <strong>File → Import Objects → From GeoJSON/Feature Collection</strong>.</p>
+</div>
+
+<!-- ── 12. Keyboard Shortcuts ────────────────────────────────────────── -->
+<div class="section" id="s12">
+  <div class="section-num">Section 12</div>
+  <h2>Keyboard Shortcuts Reference</h2>
+
+  <h3>Tools</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Key</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td><kbd>D</kbd></td><td>Polygon draw tool</td></tr>
+      <tr><td><kbd>H</kbd></td><td>Freehand draw tool</td></tr>
+      <tr><td><kbd>E</kbd></td><td>Edit tool</td></tr>
+      <tr><td><kbd>P</kbd> / hold <kbd>Space</kbd></td><td>Pan tool</td></tr>
+      <tr><td><kbd>F</kbd></td><td>Fit image to view</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Drawing</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Key</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td>Right-click</td><td>Remove last polygon vertex / cancel freehand stroke</td></tr>
+      <tr><td>Double-click</td><td>Close polygon</td></tr>
+      <tr><td><kbd>Esc</kbd></td><td>Cancel drawing / discard in-progress stroke</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Selection &amp; Editing</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Key</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td><kbd>↑</kbd> / <kbd>↓</kbd></td><td>Navigate annotation list (when no input has focus)</td></tr>
+      <tr><td><kbd>Ctrl</kbd> + click</td><td>Toggle-add annotation to selection</td></tr>
+      <tr><td><kbd>Shift</kbd> + click (list)</td><td>Range-select from last anchor to clicked row</td></tr>
+      <tr><td>Drag on empty canvas</td><td>Rubber-band multi-select (edit mode)</td></tr>
+      <tr><td><kbd>Del</kbd> / <kbd>Backspace</kbd></td><td>Delete all selected annotations</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>View</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Key / Gesture</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td>Scroll wheel</td><td>Pan vertically</td></tr>
+      <tr><td><kbd>Ctrl</kbd> + scroll</td><td>Zoom toward cursor</td></tr>
+      <tr><td>Pinch gesture</td><td>Zoom + pan (touch / trackpad)</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>File Operations</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Key</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td><kbd>Ctrl</kbd> + <kbd>S</kbd></td><td>Save annotations</td></tr>
+      <tr><td><kbd>Ctrl</kbd> + <kbd>Z</kbd></td><td>Undo (up to 50 steps)</td></tr>
+      <tr><td><kbd>Ctrl</kbd> + <kbd>Y</kbd></td><td>Redo</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="back-top"><a href="#top">↑ Back to top</a></div>
+
+</div><!-- .page-wrap -->
+
+<script>
+(function () {
+  const root = document.documentElement;
+  const btn  = document.getElementById('themeBtn');
+  let current = root.getAttribute('data-theme') || 'light';
+
+  function apply(t) {
+    root.setAttribute('data-theme', t);
+    btn.textContent = t === 'dark' ? 'Light mode' : 'Dark mode';
+    current = t;
+    try { localStorage.setItem('manual-theme', t); } catch(e) {}
+  }
+
+  // Restore saved preference
+  try {
+    const saved = localStorage.getItem('manual-theme');
+    if (saved) apply(saved);
+  } catch(e) {}
+
+  window.toggleTheme = function () { apply(current === 'dark' ? 'light' : 'dark'); };
+})();
+</script>
+</body>
+</html>
