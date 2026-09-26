@@ -16,7 +16,7 @@ Load and edit existing mask from any AI model. For instance segmentation, needs 
 
 ---
 
-## Option A — Standalone Executable (v2, recommended)
+## Option A — Standalone Executable (recommended)
 
 Build once, then double-click the exe on any Windows machine. No Python required on the target.
 
@@ -62,7 +62,7 @@ AnnotateLessAnalyseMore Installation_v2\
 
 ---
 
-## Option B — Run from Source (v1)
+## Option B — Run from Source
 
 ### Windows
 
