@@ -7,7 +7,7 @@ Built with Flask + HTML5 Canvas. No installation wizard — just run one script.
 Set the labels and colours for annotation task. This preset is based on PanNuke labels.
 <img width="598" height="687" alt="image" src="https://github.com/user-attachments/assets/2cf1d1ab-8563-4398-96ca-b594c5e4f622" />
 
-Work in local folder. Load and edit existing mask from any AI model. For instance segmentation, needs both instance and segmentation maps 
+Work in local folder. Load and edit existing mask from any AI model. For instance segmentation, needs both instance and segmentation maps (using filename xxx_ins_map.png and xxx_sem_map.png)
 <img width="2173" height="1162" alt="image" src="https://github.com/user-attachments/assets/7acd09c4-f0f1-4bff-a07b-a3700407657f" />
 
 Load and edit existing mask from any AI model. For instance segmentation, needs both instance and segmentation maps. Try from TCGA samples in "sample" folder.
