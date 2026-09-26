@@ -1,6 +1,6 @@
 # AnnotateLessAnalyseMore
 
-A browser-based histopathology annotation platform. Designed for efficient polygon and freehand annotation of microscopy images, with direct export to CoNSeP-compatible semantic and instance segmentation masks.
+A simple and lightweight browser-based annotation platform (tested on histopathology images). Designed for efficient polygon and freehand annotation of microscopy images, with direct export to semantic and instance segmentation masks.
 
 Built with Flask + HTML5 Canvas. No installation wizard — just run one script.
 
